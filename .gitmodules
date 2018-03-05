@@ -1,0 +1,9 @@
+[submodule "ext/udacity/FCND-Backyard-Flyer"]
+	path = ext/udacity/FCND-Backyard-Flyer
+	url = https://github.com/udacity/FCND-Backyard-Flyer.git
+[submodule "ext/udacity/FCND-Simulator-Release"]
+	path = ext/udacity/FCND-Simulator-Release
+	url = https://github.com/udacity/FCND-Simulator-Releases.git
+[submodule "ext/udacity/FCND-Terms1-Starter-Kit"]
+	path = ext/udacity/FCND-Terms1-Starter-Kit
+	url = https://github.com/udacity/FCND-Term1-Starter-Kit.git
