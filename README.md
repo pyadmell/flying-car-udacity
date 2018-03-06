@@ -1,7 +1,7 @@
 # Flying Car Udacity Nanodegree
 
 ## Environment Setup
-1. Download [miniconda3](https://conda.io/miniconda.html) and then install by opening the file/app that you download.
+1. Download and install [miniconda3](https://conda.io/miniconda.html).
 2. Clone the repository and then navigate to `FCND-Term1-Starter-Kit` submodule:
 ```bash
 git clone --recursive https://github.com/pyadmell/flying-car-udacity.git
@@ -12,7 +12,7 @@ cd ext/udacity/FCND-Term1-Starter-Kit
 ```bash
 conda env create -f environment.yml
 ```
-4. Verify that the fcnd environment:
+4. Verify the fcnd environment:
 ```bahs
 conda info --envs
 ```
