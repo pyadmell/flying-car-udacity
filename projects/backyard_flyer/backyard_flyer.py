@@ -25,6 +25,12 @@ class BackyardFlyer(Drone):
 
     def __init__(self, connection):
         super().__init__(connection)
+        # user specified parameters
+        self.square_side_length = 10.0       # set the target square side length (in meter)
+        self.target_altitude = 3.0          # set the target altitude (in meter)
+        self.desired_error = 0.1            # set the desired error for meeting the waypoints (in meter)
+        
+        # initialization
         self.target_position = np.array([0.0, 0.0, 0.0])
         self.all_waypoints = []
         self.current_waypoint = None
@@ -58,9 +64,9 @@ class BackyardFlyer(Drone):
                            np.square(self.local_position[1] - self.target_position[1])+
                            np.square(-self.local_position[2] - self.target_position[2]))
 
-            # check if the current position is within 5 cm of the target waypoint, 
+            # check if the current position is within a predefined distance of the target waypoint, 
             # and move the the next waypoint
-            if abs(err_pos) < 0.05:
+            if abs(err_pos) < self.desired_error:
                 self.current_waypoint += 1
                 # check if all waypoints are met, and land
                 if self.current_waypoint >= len(self.all_waypoints):
@@ -77,7 +83,7 @@ class BackyardFlyer(Drone):
         """
         if self.flight_state == States.LANDING:
             if ((self.global_position[2] - self.global_home[2] < 0.1) and
-            abs(self.local_position[2]) < 0.01):
+            abs(self.local_position[2]) < 0.015):
                 self.disarming_transition()
 
     def state_callback(self):
@@ -101,10 +107,12 @@ class BackyardFlyer(Drone):
         
         1. Return waypoints to fly a box
         """
-        return [[10.,0.,3.],
-                [10.,10.,3.],
-                [0.,10.,3.],
-                [0.,0.,3.]]
+        side_len = np.fabs(self.square_side_length)
+        target_alt = self.target_altitude
+        return [[side_len,0.,target_alt],
+                [side_len,side_len,target_alt],
+                [0.,side_len,target_alt],
+                [0.,0.,target_alt]]
 
     def arming_transition(self):
         """TODO: Fill out this method
@@ -131,7 +139,7 @@ class BackyardFlyer(Drone):
         3. Transition to the TAKEOFF state
         """
         print("takeoff transition")
-        target_altitude = 3.0
+        target_altitude = self.target_altitude
         self.target_position[2] = target_altitude
         self.takeoff(target_altitude)
         self.flight_state = States.TAKEOFF

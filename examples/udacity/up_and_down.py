@@ -1,4 +1,7 @@
-# Provided by Udacity
+#########################################################
+# Code is taken from Udacity Flying Car Nanodegree
+# Availability: https://www.udacity.com
+#########################################################
 
 import time
 from enum import Enum
