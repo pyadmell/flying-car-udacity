@@ -7,3 +7,6 @@
 [submodule "ext/udacity/FCND-Terms1-Starter-Kit"]
 	path = ext/udacity/FCND-Terms1-Starter-Kit
 	url = https://github.com/udacity/FCND-Term1-Starter-Kit.git
+[submodule "ext/udacity/udacidrone"]
+	path = ext/udacity/udacidrone
+	url = https://github.com/udacity/udacidrone.git
