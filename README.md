@@ -7,6 +7,9 @@
 
 **Code**: [backyard_flyer.py](projects/backyard_flyer/backyard_flyer.py)
 
+**Result**:
+
+![backyard flyer](doc/gif/backyard_flyer.gif)
 
 ## Environment Setup
 1. Download and install [miniconda3](https://conda.io/miniconda.html).
