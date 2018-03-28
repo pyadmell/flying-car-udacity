@@ -10,3 +10,6 @@
 [submodule "ext/udacity/udacidrone"]
 	path = ext/udacity/udacidrone
 	url = https://github.com/udacity/udacidrone.git
+[submodule "ext/udacity/FCND-Motion-Planning"]
+	path = ext/udacity/FCND-Motion-Planning
+	url = git@github.com:udacity/FCND-Motion-Planning.git
