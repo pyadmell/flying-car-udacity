@@ -77,10 +77,10 @@ self.set_home_position(global_home_position['lon0'],
 ```
 
 #### 2. Set your current local position
-Here as long as you successfully determine your local position relative to global home you'll be all set. Explain briefly how you accomplished this in your code.
-
-Meanwhile, here's a picture of me flying through the trees!
-![Forest Flying](./misc/in_the_trees.png)
+This is done using `global_to_local` method, which converts a global position to a local position relative to the home position:
+```python
+local_position = global_to_local(self.global_position, self.global_home)
+```
 
 #### 3. Set grid start position from local position
 This is another step in adding flexibility to the start location. As long as it works you're good to go!
