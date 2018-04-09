@@ -119,7 +119,7 @@ class MotionPlanning(Drone):
         self.flight_state = States.PLANNING
         print("Searching for a path ...")
         TARGET_ALTITUDE = 5
-        SAFETY_DISTANCE = 5
+        SAFETY_DISTANCE = 10
 
         self.target_position[2] = TARGET_ALTITUDE
 
@@ -157,27 +157,56 @@ class MotionPlanning(Drone):
         # Set goal as some arbitrary position on the grid
         # example: grid_goal = (-north_offset + 10, -east_offset + 10)
         # Done: adapt to set goal as latitude / longitude position and convert
-        converage_radius = 50
-        random_goal_coordinate = local_to_global([local_position[0]+random.uniform(-converage_radius, converage_radius),
-                        local_position[1]+random.uniform(-converage_radius, converage_radius),
-                        0.0], self.global_home)
-        # goal_coordinate = [lat,lon,up]
-        goal_coordinate = random_goal_coordinate
-        goal_position = global_to_local(goal_coordinate, self.global_home)
-        print('global goal position {}'.format(goal_position))
+        is_goal_feasible = False
+        while not is_goal_feasible:
+            converage_radius = 250
+            random_goal_coordinate = local_to_global([local_position[0]+random.uniform(-converage_radius, converage_radius),
+                            local_position[1]+random.uniform(-converage_radius, converage_radius),
+                            0.0], self.global_home)
+            # goal_coordinate = [lat,lon,up]
+            goal_coordinate = random_goal_coordinate
+            goal_position = global_to_local(goal_coordinate, self.global_home)
 
-        grid_goal = (int(goal_position[0])-north_offset, int(goal_position[1])-east_offset)
+            grid_goal = (int(goal_position[0])-north_offset, int(goal_position[1])-east_offset)
+            is_goal_feasible = grid[grid_goal[0]][grid_goal[1]] != 1
         
+        print('global goal position {}'.format(goal_position))
         # Run A* to find a path from start to goal
         # Done: add diagonal motions with a cost of sqrt(2) to your A* implementation
         # or move to a different search space such as a graph (not done here)
         print('Local Start and Goal: ', grid_start, grid_goal)
         path, _ = a_star(grid, heuristic, grid_start, grid_goal)
-        # TODO: prune path to minimize number of waypoints
+        # Done: prune path to minimize number of waypoints
+        def is_collinear(p1, p2, p3): 
+            # Calculate the determinant
+            det = p1[0]*(p2[1] - p3[1]) + p2[0]*(p3[1] - p1[1]) + p3[0]*(p1[1] - p2[1])
+            if det == 0:
+                return True
+            return False
+        pruned_path = []
+        if len(path) >= 3:
+            p1 = path[0]
+            p2 = path[1]
+            p3 = path[2]
+            i = 2
+            while i < (len(path) - 1):
+                while is_collinear(p1,p2,p3) and (i < len(path)-2):
+                    i += 1
+                    p2 = p3
+                    p3 = path[i]
+                pruned_path.append(p1)
+                p1 = p2
+                p2 = p3
+                i += 1
+                p3 = path[i]
+            pruned_path.append(p2)
+            pruned_path.append(p3)
+        else:
+            pruned_path = path
         # TODO (if you're feeling ambitious): Try a different approach altogether!
 
         # Convert path to waypoints
-        waypoints = [[p[0] + north_offset, p[1] + east_offset, TARGET_ALTITUDE, 0] for p in path]
+        waypoints = [[p[0] + north_offset, p[1] + east_offset, TARGET_ALTITUDE, 0] for p in pruned_path]
         # Set self.waypoints
         self.waypoints = waypoints
         # TODO: send waypoints to sim (this is just for visualization of waypoints)

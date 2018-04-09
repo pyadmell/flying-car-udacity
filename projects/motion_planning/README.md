@@ -141,7 +141,44 @@ if x + 1 > n or y +1 > m or grid[x + 1, y + 1] == 1:
 ```
 
 #### 6. Cull waypoints 
-For this step you can use a collinearity test or ray tracing method like Bresenham. The idea is simply to prune your path of unnecessary waypoints. Explain the code you used to accomplish this step.
+For this step, a 2D collinearity test is implemented to prune the path. In each step, three consecutive points `(p1,p2,p3)` on the path is tested against collinearity. For each test, there are two cases:
+- If collinear, `p2` is excluded, and test is contuned for `p1`, `p3`, and the next point on the path. 
+- If not collinear, `p1` is added to the proned path, and test is continued for `p2`, `p3`, and the next point on the path.
+
+```python
+# Prune path to minimize number of waypoints
+def is_collinear(p1, p2, p3): 
+    # Calculate the determinant
+    det = p1[0]*(p2[1] - p3[1]) + p2[0]*(p3[1] - p1[1]) + p3[0]*(p1[1] - p2[1])
+    if det == 0:
+        return True
+    return False
+pruned_path = []
+if len(path) >= 3:
+    p1 = path[0]
+    p2 = path[1]
+    p3 = path[2]
+    i = 2
+    while i < (len(path) - 1):
+        while is_collinear(p1,p2,p3) and (i < len(path)-2):
+            #if collinear, continue testing next point
+            i += 1
+            p2 = p3
+            p3 = path[i]
+        # if not collinear, add p1 to the path, and continue the test for p2, p3, and the next point
+        pruned_path.append(p1)
+        p1 = p2
+        p2 = p3
+        i += 1
+        p3 = path[i]
+    pruned_path.append(p2)
+    pruned_path.append(p3)
+else:
+    pruned_path = path
+
+# Convert path to waypoints
+waypoints = [[p[0] + north_offset, p[1] + east_offset, TARGET_ALTITUDE, 0] for p in pruned_path]
+```
 
 ### Execute the flight
 #### 1. Does it work?
