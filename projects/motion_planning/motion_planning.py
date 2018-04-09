@@ -4,12 +4,13 @@ import msgpack
 from enum import Enum, auto
 
 import numpy as np
+import random
 
 from utils.planning_utils import a_star, heuristic, create_grid
 from udacidrone import Drone
 from udacidrone.connection import MavlinkConnection
 from udacidrone.messaging import MsgID
-from udacidrone.frame_utils import global_to_local
+from udacidrone.frame_utils import global_to_local, local_to_global
 
 
 class States(Enum):
@@ -33,6 +34,7 @@ class MotionPlanning(Drone):
         self.check_state = {}
         
         self.map_file = 'map/colliders.csv'
+        random.seed()
 
         # initial state
         self.flight_state = States.MANUAL
@@ -148,13 +150,24 @@ class MotionPlanning(Drone):
         grid, north_offset, east_offset = create_grid(data, TARGET_ALTITUDE, SAFETY_DISTANCE)
         print("North offset = {0}, east offset = {1}".format(north_offset, east_offset))
         # Define starting point on the grid (this is just grid center)
-        grid_start = (-north_offset, -east_offset)
-        # TODO: convert start position to current position rather than map center
+        # example: grid_start = (-north_offset, -east_offset)
+        # Done: convert start position to current position rather than map center
         grid_start=(int(local_position[0])-north_offset,int(local_position[1]) -east_offset)
+        
         # Set goal as some arbitrary position on the grid
-        grid_goal = (-north_offset + 10, -east_offset + 10)
-        # TODO: adapt to set goal as latitude / longitude position and convert
-        grid_goal = (int(local_position[0])-north_offset + 10, int(local_position[1])-east_offset + 10)
+        # example: grid_goal = (-north_offset + 10, -east_offset + 10)
+        # Done: adapt to set goal as latitude / longitude position and convert
+        converage_radius = 50
+        random_goal_coordinate = local_to_global([local_position[0]+random.uniform(-converage_radius, converage_radius),
+                        local_position[1]+random.uniform(-converage_radius, converage_radius),
+                        0.0], self.global_home)
+        # goal_coordinate = [lat,lon,up]
+        goal_coordinate = random_goal_coordinate
+        goal_position = global_to_local(goal_coordinate, self.global_home)
+        print('global goal position {}'.format(goal_position))
+
+        grid_goal = (int(goal_position[0])-north_offset, int(goal_position[1])-east_offset)
+        
         # Run A* to find a path from start to goal
         # TODO: add diagonal motions with a cost of sqrt(2) to your A* implementation
         # or move to a different search space such as a graph (not done here)

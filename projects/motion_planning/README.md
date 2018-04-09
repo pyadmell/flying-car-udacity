@@ -83,10 +83,33 @@ local_position = global_to_local(self.global_position, self.global_home)
 ```
 
 #### 3. Set grid start position from local position
-This is another step in adding flexibility to the start location. As long as it works you're good to go!
+This is done by appling the north and east offsets to the local position to get the start location on the grid:
+```python
+# Convert start position to current position rather than map center
+grid_start=(int(local_position[0])-north_offset,int(local_position[1]) -east_offset)
+```
 
 #### 4. Set grid goal position from geodetic coords
-This step is to add flexibility to the desired goal location. Should be able to choose any (lat, lon) within the map and have it rendered to a goal location on the grid.
+This is done by using `global_to_local` method to convert any `(lat, lon)` within the map to a position relative to the global home position, subsequently the goal position on the grid is set by applying the offsets.
+```python
+# adapt to set goal as latitude / longitude position and convert
+goal_position = global_to_local(goal_coordinate, self.global_home)
+print('global goal position {}'.format(goal_position))
+
+grid_goal = (int(goal_position[0])-north_offset, int(goal_position[1])-east_offset)
+```
+
+This part is tested by selecting a random position around local position, but any set of `(lat, lon)` works as well:
+```python
+# select a random goal coordinate
+converage_radius = 50
+random_goal_coordinate = local_to_global([local_position[0]+random.uniform(-converage_radius, converage_radius),
+                local_position[1]+random.uniform(-converage_radius, converage_radius),
+                0.0], self.global_home)
+
+# goal_coordinate = [lat,lon,up]
+goal_coordinate = random_goal_coordinate
+```
 
 #### 5. Modify A* to include diagonal motion (or replace A* altogether)
 Minimal requirement here is to modify the code in planning_utils() to update the A* implementation to include diagonal motions on the grid that have a cost of sqrt(2), but more creative solutions are welcome. Explain the code you used to accomplish this step.
