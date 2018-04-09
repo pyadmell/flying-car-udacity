@@ -55,6 +55,11 @@ class Action(Enum):
     EAST = (0, 1, 1)
     NORTH = (-1, 0, 1)
     SOUTH = (1, 0, 1)
+    # Diagonal actions
+    WEST_NORTH = (-1, -1, np.sqrt(2))
+    WEST_SOUTH = (1, -1, np.sqrt(2))
+    EAST_NORTH = (-1, 1, np.sqrt(2))
+    EAST_SOUTH = (1, 1, np.sqrt(2))
 
     @property
     def cost(self):
@@ -84,6 +89,16 @@ def valid_actions(grid, current_node):
         valid_actions.remove(Action.WEST)
     if y + 1 > m or grid[x, y + 1] == 1:
         valid_actions.remove(Action.EAST)
+    
+    # filter diagonal action feasibility
+    if x - 1 < 0 or y - 1 < 0 or grid[x - 1, y - 1] == 1:
+        valid_actions.remove(Action.WEST_NORTH)
+    if x + 1 > n or y - 1 < 0 or grid[x + 1, y - 1] == 1:
+        valid_actions.remove(Action.WEST_SOUTH)
+    if x - 1 < 0 or y + 1 > m or grid[x - 1, y + 1] == 1:
+        valid_actions.remove(Action.EAST_NORTH)
+    if x + 1 > n or y +1 > m or grid[x + 1, y + 1] == 1:
+        valid_actions.remove(Action.EAST_SOUTH)
 
     return valid_actions
 

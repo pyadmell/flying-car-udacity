@@ -112,7 +112,33 @@ goal_coordinate = random_goal_coordinate
 ```
 
 #### 5. Modify A* to include diagonal motion (or replace A* altogether)
-Minimal requirement here is to modify the code in planning_utils() to update the A* implementation to include diagonal motions on the grid that have a cost of sqrt(2), but more creative solutions are welcome. Explain the code you used to accomplish this step.
+This is done by modifying `planning_utils.py` script. To complete this part, first a set of diagonal actions are defined in `Action` class as follows:
+```python
+class Action(Enum):
+
+    ...
+
+    # Diagonal actions
+    WEST_NORTH = (-1, -1, np.sqrt(2))
+    WEST_SOUTH = (1, -1, np.sqrt(2))
+    EAST_NORTH = (-1, 1, np.sqrt(2))
+    EAST_SOUTH = (1, 1, np.sqrt(2))
+    
+    ...
+```
+
+Then `valid_actions` method is modified to check the feasibility of diagonal actions:
+```python
+# filter diagonal action feasibility
+if x - 1 < 0 or y - 1 < 0 or grid[x - 1, y - 1] == 1:
+    valid_actions.remove(Action.WEST_NORTH)
+if x + 1 > n or y - 1 < 0 or grid[x + 1, y - 1] == 1:
+    valid_actions.remove(Action.WEST_SOUTH)
+if x - 1 < 0 or y + 1 > m or grid[x - 1, y + 1] == 1:
+    valid_actions.remove(Action.EAST_NORTH)
+if x + 1 > n or y +1 > m or grid[x + 1, y + 1] == 1:
+    valid_actions.remove(Action.EAST_SOUTH)
+```
 
 #### 6. Cull waypoints 
 For this step you can use a collinearity test or ray tracing method like Bresenham. The idea is simply to prune your path of unnecessary waypoints. Explain the code you used to accomplish this step.
