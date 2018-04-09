@@ -184,6 +184,8 @@ waypoints = [[p[0] + north_offset, p[1] + east_offset, TARGET_ALTITUDE, 0] for p
 #### 1. Does it work?
 It works!
 
+![Motion Planning Demo](./doc/gif/motion_planning.gif)
+
 ### Double check that you've met specifications for each of the [rubric](https://review.udacity.com/#!/rubrics/1534/view) points.
 
 # Extra Challenges: Real World Planning
