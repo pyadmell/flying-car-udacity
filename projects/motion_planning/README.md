@@ -55,10 +55,26 @@ These scripts contain a basic planning implementation that includes:
 ### Implementing Your Path Planning Algorithm
 
 #### 1. Set your global home position
-Here students should read the first line of the csv file, extract lat0 and lon0 as floating point values and use the self.set_home_position() method to set global home. Explain briefly how you accomplished this in your code.
+The `lat0` and `lon0` values are extracted from colliders csv file into a dictionary with `lat0` and `lon0` values:
+```python
+# Read lat0, lon0 from colliders into a dictionary with lat0, lon0 values
+def converter(s):
+    l=str(s, 'utf-8').split(' ')
+    d={l[0]:float(l[1])}
+    return d
 
-And here is a lovely picture of our downtown San Francisco environment from above!
-![Map of SF](./misc/map.png)
+data = np.genfromtxt(self.map_file, max_rows=1, delimiter=',', converters={0:converter,1:converter}, dtype=object, autostrip=True)
+global_home_position = dict()
+for d in data:
+    global_home_position.update(d)
+```
+Then home position is set based on the `lat0` and `lon0` values:
+```python
+# Set home position to (lon0, lat0, 0)
+self.set_home_position(global_home_position['lon0'],
+                      global_home_position['lat0'],
+                      0.0)
+```
 
 #### 2. Set your current local position
 Here as long as you successfully determine your local position relative to global home you'll be all set. Explain briefly how you accomplished this in your code.
