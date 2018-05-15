@@ -13,3 +13,9 @@
 [submodule "ext/udacity/FCND-Motion-Planning"]
 	path = ext/udacity/FCND-Motion-Planning
 	url = git@github.com:udacity/FCND-Motion-Planning.git
+[submodule "FCND-Controls"]
+	path = ext/udacity/FCND-Controls
+	url = https://github.com/udacity/FCND-Controls
+[submodule "FCND-Controls-CPP"]
+	path = ext/udacity/FCND-Controls-CPP
+	url = https://github.com/udacity/FCND-Controls-CPP.git
