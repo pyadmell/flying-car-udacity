@@ -19,3 +19,6 @@
 [submodule "FCND-Controls-CPP"]
 	path = ext/udacity/FCND-Controls-CPP
 	url = https://github.com/udacity/FCND-Controls-CPP.git
+[submodule "ext/udacity/FCND-Estimation-CPP"]
+	path = ext/udacity/FCND-Estimation-CPP
+	url = https://github.com/udacity/FCND-Estimation-CPP.git
