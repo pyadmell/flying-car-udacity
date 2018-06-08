@@ -182,7 +182,6 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
   velZRef = -CONSTRAIN(-velZRef, -maxDescentRate, maxAscentRate);
   float accelCmd = accelZCmd + (kpVelZ*(velZRef - velZ));
   thrust = mass * (9.81f - (accelCmd / R(2,2)));
-  if(thrust<0){thrust=0;}
   /////////////////////////////// END STUDENT CODE ////////////////////////////
   
   return thrust;
