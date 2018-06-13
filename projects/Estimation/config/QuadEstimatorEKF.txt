@@ -18,7 +18,7 @@ GPSVelXYStd = 0.1
 GPSVelZStd = 0.75
 
 # Magnetometer
-MagYawStd = .2
+MagYawStd = .1
 
 dtIMU = 0.002
 attitudeTau = 100
