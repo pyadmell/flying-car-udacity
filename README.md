@@ -1,5 +1,10 @@
 # Udacity Flying Car Nanodegree
 
+[![Udacity - Fly Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/flying-car-nanodegree--nd787)
+
+
+![Certificate](doc/img/flying_car_nanodegree_certificate.PNG)
+
 ## Projects
 
 ![TBD...](doc/gif/Crazyfly.gif)
